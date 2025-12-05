@@ -543,7 +543,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
 
       if (type === PowerUpType.SHIELD) {
           playSound('collect_shield');
-          p.shieldCount = Math.min((p.shieldCount || 0) + 1, 3);
+          p.shieldCount = 1
       } else if (type === PowerUpType.SCORE_MULTIPLIER) {
           playSound('collect_star');
           let duration = POWERUP_DURATION;
@@ -741,6 +741,14 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
         const y = lastPlat.y - gapY;
         
         let newWidth = PLATFORM_WIDTH;
+
+       // ⭐ 난이도 랜덤 스케일 (0.8 ~ 1.2)
+       const randomDifficulty = 0.8 + Math.random() * 0.4;
+
+       // ⭐ 발판 폭에 적용
+       newWidth = newWidth * randomDifficulty;
+
+        
         if (currentScore > 500) {
            const shrinkFactor = Math.min((currentScore - 500) / 5000, 0.5);
            newWidth = Math.max(PLATFORM_WIDTH * (1 - shrinkFactor), 45);
@@ -767,8 +775,24 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
                  if (initialX + moveRange + newWidth > CANVAS_WIDTH) initialX = CANVAS_WIDTH - newWidth - moveRange;
                  x = initialX;
              }
-        }
+        }      
+        // ⭐ 이동형 발판 크기 랜덤 조정
+if (isMoving) {
+    const sizeRandom = 0.7 + Math.random() * 0.6;  // 0.7 ~ 1.3배
+    newWidth = newWidth * sizeRandom;
 
+    // 너무 작거나 큰 발판 방지
+    newWidth = Math.max(40, Math.min(newWidth, PLATFORM_WIDTH * 1.5));
+}
+
+          // ⭐ 이동형일 때만 폭 랜덤 적용
+if (isMoving) {
+    const sizeRandom = 0.7 + Math.random() * 0.6; // 0.7 ~ 1.3배
+    newWidth = newWidth * sizeRandom;
+
+    // 안전 제한
+    newWidth = Math.max(40, Math.min(newWidth, PLATFORM_WIDTH * 1.5));
+}
         // PowerUp Spawn - Redistributed probabilities (0.25 each)
         let powerUp: PowerUpType | undefined;
         if (Math.random() < POWERUP_SPAWN_CHANCE) {
@@ -782,9 +806,21 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
         // Determine Color based on current Score
         const newTier = getCurrentTier(scoreRef.current);
         
-        // Only apply tier color if the platform is moving
-        const platformColor = isMoving ? newTier.color : SCORE_TIERS[0].color;
-        const platformLightColor = isMoving ? newTier.light : SCORE_TIERS[0].light;
+        // 🎨 이동형 발판만 랜덤 색상 적용
+let platformColor, platformLightColor;
+
+if (isMoving) {
+    // 이동형 발판은 랜덤 색상
+    const randomTier = SCORE_TIERS[Math.floor(Math.random() * SCORE_TIERS.length)];
+    platformColor = randomTier.color;
+    platformLightColor = randomTier.light;
+} else {
+    // 일반 발판은 기존처럼 기본 티어 색상 유지
+    const baseTier = SCORE_TIERS[0];
+    platformColor = baseTier.color;
+    platformLightColor = baseTier.light;
+}
+
 
         platformsRef.current.push({ 
             x, y, width: newWidth, height: PLATFORM_HEIGHT, id: Math.random(),
@@ -1141,26 +1177,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
         }}
       />
       
-      {/* PowerUp HUD */}
-      {gameState === GameState.PLAYING && (
-          <div className="absolute top-2 left-0 right-0 flex justify-center gap-2 pointer-events-none">
-              {/* Shield Slots */}
-              <div className="flex gap-1">
-                  {[...Array(3)].map((_, i) => (
-                      <div key={i} className={`w-8 h-8 rounded-full border-2 flex items-center justify-center text-lg ${i < playerRef.current.shieldCount ? 'bg-blue-500/50 border-blue-400' : 'bg-slate-700/50 border-slate-600'}`}>
-                          {i < playerRef.current.shieldCount && '🛡️'}
-                      </div>
-                  ))}
-              </div>
-              
-              {/* Other Active Buffs */}
-              <div className="flex gap-2 ml-4">
-                  {playerRef.current.scoreMultiplierActive && <span className="text-2xl text-yellow-400 font-bold animate-pulse drop-shadow-[0_0_5px_rgba(251,191,36,0.8)]" title="2x Points">x2</span>}
-                  {playerRef.current.isGiant && <span className="text-2xl animate-pulse drop-shadow-[0_0_5px_rgba(16,185,129,0.8)]" title="Giant Active">🍄</span>}
-                  {playerRef.current.isBoosting && <span className="text-2xl animate-bounce drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]" title="Boosting!">🚀</span>}
-              </div>
-          </div>
-      )}
+    
       
       {gameState === GameState.PLAYING && (
         <>
