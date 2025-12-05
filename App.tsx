@@ -436,7 +436,7 @@ const App: React.FC = () => {
               </button>
               
               <h3 className="text-xl text-white font-bold mb-4 flex items-center gap-2 shrink-0">
-                <span className="text-2xl">📖</span> 게임 가이드
+                <span className="text-2xl">📖</span> 게임 가이드 (찬이가 만듬ㅎ)
               </h3>
               
               <div className="space-y-6 text-slate-300 overflow-y-auto custom-scrollbar pr-2 flex-1">
@@ -496,7 +496,7 @@ const App: React.FC = () => {
                        <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-xl shrink-0 border border-emerald-500/50">🍄</div>
                        <div>
                          <div className="font-bold text-emerald-300 text-sm">거대화 (Giant)</div>
-                         <div className="text-xs text-slate-400">10초간 커져서 발판 밟기가 쉬워집니다.</div>
+                         <div className="text-xs text-slate-400">5초간 커져서 발판 밟기가 쉬워집니다.</div>
                        </div>
                     </div>
                     <div className="flex items-center gap-3 bg-slate-800/50 p-2 rounded-lg">
