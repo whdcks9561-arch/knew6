@@ -1,9 +1,8 @@
-
 {
-  "apiKey": "YOUR_API_KEY_HERE",
-  "authDomain": "YOUR_PROJECT_ID.firebaseapp.com",
-  "projectId": "YOUR_PROJECT_ID",
-  "storageBucket": "YOUR_PROJECT_ID.appspot.com",
-  "messagingSenderId": "YOUR_SENDER_ID",
-  "appId": "YOUR_APP_ID"
+  "apiKey": "AIzaSyA3sa3A07V9z97PfgESglyc0eTEGkZx-Hs",
+  "authDomain": "knew-6de9f.firebaseapp.com",
+  "projectId": "knew-6de9f",
+  "storageBucket": "knew-6de9f.appspot.com",
+  "messagingSenderId": "295273355044",
+  "appId": "1:295273355044:web:14f71780c76141e75585b1"
 }
