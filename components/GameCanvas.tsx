@@ -700,6 +700,10 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
 
       // 2. PowerUp Collection (Separate check, always active, wider radius while boosting)
       if (plat.powerUp) {
+            // 🚀 부스터 중에는 부스터가 아닌 아이템은 획득 금지
+    if (player.isBoosting && plat.powerUp !== PowerUpType.BOOSTER) {
+        return; 
+    }
           const puX = plat.x + plat.width / 2;
           const puY = plat.y - POWERUP_SIZE;
           const dist = Math.hypot((player.x + player.width/2) - puX, (player.y + player.height/2) - puY);
