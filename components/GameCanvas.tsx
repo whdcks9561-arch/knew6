@@ -559,7 +559,7 @@ export const GameCanvas: React.FC<GameCanvasProps> = ({
           }, duration);
       } else if (type === PowerUpType.GIANT) {
           playSound('collect_mushroom');
-          let duration = POWERUP_DURATION;
+          let duration = 5000; // 5초
           if (p.isGiant && p.giantEndTime && p.giantEndTime > now) {
               duration += (p.giantEndTime - now);
           }
